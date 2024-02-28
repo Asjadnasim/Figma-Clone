@@ -10,13 +10,15 @@ import {
 	handleCanvasMouseDown,
 	handleCanvasMouseUp,
 	handleCanvasObjectModified,
+	handleCanvasObjectScaling,
+	handleCanvasSelectionCreated,
 	handleCanvaseMouseMove,
 	handleResize,
 	initializeFabric,
 	renderCanvas,
 } from '@/lib/canvas';
 import LeftSidebar from '@/components/LeftSidebar';
-import { ActiveElement } from '@/types/type';
+import { ActiveElement, Attributes } from '@/types/type';
 import { useMutation, useRedo, useStorage, useUndo } from '@/liveblocks.config';
 import { defaultNavElement, navElements } from '@/constants';
 import { handleDelete, handleKeyDown } from '@/lib/key-events';
@@ -33,8 +35,19 @@ export default function Home() {
 	const selectedShapeRef = useRef<string | null>(null);
 	const activeObjectRef = useRef<fabric.Object | null>(null);
 	const imageInputRef = useRef<HTMLInputElement>(null);
+	const isEditingRef = useRef(false);
 
 	const canvasObjects = useStorage((root) => root.canvasObjects);
+
+	const [elementAttributes, setElementAttributes] = useState<Attributes>({
+		width: '',
+		height: '',
+		fontSize: '',
+		fontFamily: '',
+		fontWeight: '',
+		fill: '#aabbcc',
+		stroke: '#aabbcc',
+	});
 
 	const deleteAllShapes = useMutation(({ storage }) => {
 		const canvasObjects = storage.get('canvasObjects');
@@ -147,6 +160,21 @@ export default function Home() {
 			});
 		});
 
+		canvas.on('selection:created', (options: any) => {
+			handleCanvasSelectionCreated({
+				options,
+				isEditingRef,
+				setElementAttributes,
+			});
+		});
+
+		canvas.on('object:scaling', (options) => {
+			handleCanvasObjectScaling({
+				options,
+				setElementAttributes,
+			});
+		});
+
 		window.addEventListener('resize', () => {
 			handleResize({ canvas: fabricRef.current });
 		});
@@ -196,7 +224,14 @@ export default function Home() {
 			<section className='flex h-full flex-row'>
 				<LeftSidebar allShapes={Array.from(canvasObjects)} />
 				<Live canvasRef={canvasRef} />
-				<RightSideBar />
+				<RightSideBar
+					elementAttributes={elementAttributes}
+					setElementAttributes={setElementAttributes}
+					fabricRef={fabricRef}
+					isEditingRef={isEditingRef}
+					activeObjectRef={activeObjectRef}
+					syncShapeInStorage={syncShapeInStorage}
+				/>
 			</section>
 		</main>
 	);
