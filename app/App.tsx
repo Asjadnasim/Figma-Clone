@@ -18,12 +18,12 @@ import {
 	initializeFabric,
 	renderCanvas,
 } from '@/lib/canvas';
-import LeftSidebar from '@/components/LeftSidebar';
 import { ActiveElement, Attributes } from '@/types/type';
 import { useMutation, useRedo, useStorage, useUndo } from '@/liveblocks.config';
 import { defaultNavElement, navElements } from '@/constants';
 import { handleDelete, handleKeyDown } from '@/lib/key-events';
 import { handleImageUpload } from '@/lib/shapes';
+import LeftSidebar from '@/components/LeftSidebar';
 
 export default function Home() {
 	const undo = useUndo();

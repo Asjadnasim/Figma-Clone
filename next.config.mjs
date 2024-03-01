@@ -21,7 +21,6 @@ const nextConfig = {
 	typescript: {
 		ignoreBuildErrors: true,
 	},
-	future: { webpack5: true },
 };
 
 export default nextConfig;
