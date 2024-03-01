@@ -1,7 +1,7 @@
 'use client';
 
 import { fabric } from 'fabric';
-import { LeftSidebar, Live, Navbar, RightSideBar } from '@/components/index';
+import { LeftSideBar, Live, Navbar, RightSideBar } from '@/components/index';
 import { useEffect, useRef, useState } from 'react';
 import {
 	handleCanvasMouseDown,
@@ -226,7 +226,7 @@ export default function Home() {
 			/>
 
 			<section className='flex h-full flex-row'>
-				<LeftSidebar allShapes={Array.from(canvasObjects)} />
+				<LeftSideBar allShapes={Array.from(canvasObjects)} />
 				<Live canvasRef={canvasRef} undo={undo} redo={redo} />
 				<RightSideBar
 					elementAttributes={elementAttributes}
