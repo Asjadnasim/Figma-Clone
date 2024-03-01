@@ -38,7 +38,7 @@ const LeftSidebar = ({ allShapes }: { allShapes: Array<any> }) => {
 				</div>
 			</section>
 		),
-		[allShapes]
+		[allShapes?.length]
 	);
 
 	return memoizedShapes;
